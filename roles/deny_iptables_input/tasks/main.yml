@@ -1,0 +1,8 @@
+---
+
+# deny_iptables_input
+
+- name: Deny INPUT
+  shell: iptables -P INPUT DROP
+
+...

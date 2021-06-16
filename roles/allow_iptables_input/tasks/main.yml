@@ -1,0 +1,8 @@
+---
+
+# allow_iptables_input
+
+- name: Allow INPUT
+  shell: iptables -P INPUT ACCEPT
+
+...

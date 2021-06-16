@@ -3,10 +3,10 @@
 - name: Deploy Docker Wordpress 
   hosts: all
   vars:
-    freenom_domain: umblertest.tk
+    freenom_domain: umblerchallange.tk
     certbot_email: viniciusbmello@gmail.com
   roles: 
-   #- change_ssh_port
+    - allow_iptables_input
     - set_timezone
     - update_debian_like
     - install_aptitude
@@ -15,5 +15,6 @@
     - deploy_wordpress_http
     - certbot_force_renewal
     - enable_https_nginx
+    - deny_iptables_input
 
 ...
