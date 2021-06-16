@@ -1,5 +1,5 @@
 [ubuntu]
-umbler_wordpress	ansible_ssh_host=umblertest.tk
+umbler_wordpress	ansible_ssh_host=ec2-3-91-95-166.compute-1.amazonaws.com
 
 [servers:children]
 ubuntu
