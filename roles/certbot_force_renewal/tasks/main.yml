@@ -1,0 +1,18 @@
+---
+
+# certbot_force_renewal
+
+- name: Wait Certbot to Exit
+  shell: docker wait certbot
+
+- name: Change Staging to Force-Renewal on Certbot container
+  shell: sed -i 's/staging/force-renewal/gI' docker-compose.yml
+  args:
+    chdir: /tmp/compose
+
+- name: Deploy Certbot as Force-Renewal
+  shell: docker-compose up --force-recreate --no-deps certbot
+  args:
+    chdir: /tmp/compose
+
+...

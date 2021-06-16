@@ -1,0 +1,32 @@
+---
+
+# certbot_force_renewal
+
+- name: Stop nginx webserver
+  shell: docker-compose stop webserver
+  args:
+    chdir: /tmp/compose
+
+- name: Replace nginx.conf with https
+  copy:
+    src: nginx.conf
+    dest: /tmp/compose/nginx-conf/nginx.conf
+    force: yes
+    mode: '0644'
+
+- name: Change domain on nginx file
+  shell: sed -i 's/example.com/{{ freenom_domain }}/gI' nginx.conf
+  args:
+    chdir: /tmp/compose/nginx-conf
+
+- name: Security paramns for nginx webserver
+  shell: curl -sSLo nginx-conf/options-ssl-nginx.conf https://raw.githubusercontent.com/certbot/certbot/master/certbot-nginx/certbot_nginx/_internal/tls_configs/options-ssl-nginx.conf
+  args:
+    chdir: /tmp/compose
+
+- name: Recreate nginx webserver
+  shell: docker-compose up -d --force-recreate --no-deps webserver
+  args:
+    chdir: /tmp/compose
+
+...

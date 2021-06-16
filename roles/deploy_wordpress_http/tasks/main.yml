@@ -1,0 +1,53 @@
+---
+
+# deploy_wordpress_http
+
+- name: Copy compose file
+  copy:
+    src: docker-compose.yml
+    dest: /tmp/compose/docker-compose.yml
+    mode: '0644'
+
+- name: Copy nginx.conf file
+  copy:
+    src: nginx.conf
+    dest: /tmp/compose/nginx-conf/nginx.conf
+    mode: '0644'
+
+- name: Change email on docker-compose file
+  shell: sed -i 's/contato@main.com/{{ certbot_email }}/gI' docker-compose.yml
+  args:
+    chdir: /tmp/compose
+
+- name: Change domain on docker-compose file
+  shell: sed -i 's/example.com/{{ freenom_domain }}/gI' docker-compose.yml
+  args:
+    chdir: /tmp/compose
+
+- name: Change domain on nginx file
+  shell: sed -i 's/example.com/{{ freenom_domain }}/gI' nginx.conf
+  args:
+    chdir: /tmp/compose/nginx-conf
+
+- name: Copy .env file
+  copy:
+    src: .env
+    dest: /tmp/compose/.env
+    mode: '0644'
+
+- name: Stop compose services
+  docker_compose:
+    project_src: /tmp/compose
+    stopped: yes
+  vars:
+    - ansible_python_interpreter: /bin/python3
+
+- name: Deploy compose services
+  docker_compose:
+    project_src: /tmp/compose
+    files:
+      - docker-compose.yml
+  vars:
+    - ansible_python_interpreter: /bin/python3
+
+...

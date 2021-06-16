@@ -1,0 +1,86 @@
+---
+
+# install_docker
+
+- name: Uninstall old versions of Docker (Debian like)
+  apt:
+    name: "{{ item }}"
+    state: absent
+  loop: [
+    'containerd',
+    'docker',
+    'docker-engine',
+    'docker.io',
+    'runc'
+  ]
+  when: (ansible_distribution == 'Debian') or
+        (ansible_distribution == 'Ubuntu')
+
+- name: Install required system package (Debian like)
+  apt:
+    name: "{{ item }}"
+    state: latest
+    update_cache: yes
+  loop: [
+    'apt-transport-https',
+    'ca-certificates',
+    'curl',
+    'gnupg',
+    'lsb-release',
+    'python3-pip',
+    'python3-setuptools',
+    'software-properties-common'
+  ]
+  when: (ansible_distribution == 'Debian') or
+        (ansible_distribution == 'Ubuntu')
+
+- name: Add Docker GPG key
+  apt_key:
+    url: "{{ docker_apt_gpg_key }}"
+    state: present
+  when: (ansible_distribution == 'Debian') or
+        (ansible_distribution == 'Ubuntu')
+
+- name: Verify Docker fingerprint
+  apt_key:
+    id: 0EBFCD88
+    state: present
+  when: (ansible_distribution == 'Debian') or
+        (ansible_distribution == 'Ubuntu')
+
+- name: Setup Docker repository
+  apt_repository:
+    repo: "{{ docker_apt_repository }}"
+    state: present
+    update_cache: yes
+  when: (ansible_distribution == 'Debian') or
+        (ansible_distribution == 'Ubuntu')
+
+- name: Install Docker
+  apt:
+    name: docker-ce
+    state: present
+    update_cache: yes
+  when: (ansible_distribution == 'Debian') or
+        (ansible_distribution == 'Ubuntu')
+
+- name: Run and enable Docker
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Install Docker Module for Python
+  pip:
+    name:
+      - docker
+      - docker-compose
+
+- name: Install or Upgrade docker-compose
+  get_url:
+    url : "https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-Linux-x86_64"
+    dest: /usr/local/bin/docker-compose
+    mode: 'a+x'
+    force: yes
+
+...

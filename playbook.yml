@@ -1,0 +1,21 @@
+---
+
+- name: Deploy Docker Wordpress 
+  hosts: all
+  vars:
+    freenom_domain: umblerdocker.tk
+    certbot_email: viniciusbmello@gmail.com
+    default_ssh_port: 22
+    custom_ssh_port: 1022
+  roles: 
+   #- change_ssh_port
+    - set_timezone
+    - update_debian_like
+    - install_aptitude
+    - install_docker_compose
+    - compose_directories
+    - deploy_wordpress_http
+    - certbot_force_renewal
+    - enable_https_nginx
+
+...

@@ -1,0 +1,14 @@
+---
+
+# install_aptitude
+
+- name: Install aptitude using apt (Debian like)
+  apt:
+    name: "aptitude"
+    state: latest
+    update_cache: yes
+    force_apt_get: yes
+  when: (ansible_distribution == 'Debian') or
+        (ansible_distribution == 'Ubuntu')
+
+...

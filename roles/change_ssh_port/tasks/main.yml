@@ -1,0 +1,73 @@
+---
+
+# change_ssh_port
+
+- name: Set configured port fact
+  set_fact:
+    configured_port: "{{ custom_ssh_port }}"
+
+- name: Check if host's using the default SSH port
+  wait_for:
+    port: "{{ default_ssh_port }}"
+    state: "started"
+    host: "{{ ansible_fqdn }}"
+    connect_timeout: "5"
+    timeout: "10"
+  delegate_to: "localhost"
+  ignore_errors: "yes"
+  register: default_ssh
+
+- name: Set inventory ansible_port to default
+  set_fact:
+    ansible_port: "{{ default_ssh_port }}"
+  when: default_ssh is defined and
+        default_ssh.state == "started"
+  register: ssh_port_set
+
+- name: Check if host's using the custom SSH port
+  wait_for:
+    port: "{{ custom_ssh_port }}"
+    state: "started"
+    host: "{{ ansible_fqdn }}"
+    connect_timeout: "5"
+    timeout: "10"
+  delegate_to: "localhost"
+  ignore_errors: "yes"
+  register: custom_ssh
+  when: default_ssh is defined and
+        default_ssh.state is undefined
+
+- name: SSH port is already configured properly
+  debug:
+    msg: "SSH port is already configured properly"
+  when: configured_ssh is defined and
+        configured_ssh.state is defined and
+        configured_ssh.state == "started"
+  register: ssh_port_set
+
+- name: Fail if SSH port was not auto-detected (unknown)
+  fail:
+    msg: "The SSH port is neither {{ default_ssh_port }} or {{ custom_ssh_port }}."
+  when: ssh_port_set is undefined
+
+- name: Confirm host connection works
+  ping:
+
+- name: Setup custom SSH port
+  lineinfile:
+    dest: "/etc/ssh/sshd_config"
+    regexp: "^Port"
+    line: "Port {{ configured_port }}"
+  notify: "Restart sshd"
+
+- name: Ensure SSH is reloaded if need be
+  meta: flush_handlers
+
+- name: Ensure we use the configured SSH port for the remainder of the role
+  set_fact:
+    ansible_port: "{{ configured_port }}"
+
+- name: Run deferred setup to gather facts
+  setup:
+
+...

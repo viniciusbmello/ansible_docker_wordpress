@@ -1,0 +1,18 @@
+---
+
+# compose_directories
+
+- name: Create Compose directory
+  file:
+    path: /tmp/compose
+    state: directory
+    mode: '0755'
+
+- name: Create Nginx directory
+  ansible.builtin.file:
+    path: /tmp/compose/nginx-conf
+    state: directory
+    mode: '0755'
+
+
+...
