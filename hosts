@@ -1,5 +1,5 @@
 [ubuntu]
-umbler_wordpress	ansible_ssh_host=labs.sub06112009370.vcnumbler.oraclevcn.com
+umbler_wordpress	ansible_ssh_host=umblertest.tk
 
 [servers:children]
 ubuntu
