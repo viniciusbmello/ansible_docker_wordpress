@@ -9,7 +9,7 @@ This is an script where the main objective is to build a Docker service for Word
 ## Demo
 
 An application deploy can be found hosted at [AWS](https://aws.amazon.com/). 
-* Link to access: [Wordpress-FPM](https://umblerdocker.tk/).
+* Link to access: [Wordpress-FPM](https://umblerchallange.tk/).
 
 ## :pushpin: Table of Contents
 
