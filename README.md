@@ -37,7 +37,7 @@ This project was developed with the following technologies:
 
 ## :construction_worker: Installation
 
-**You need to install [Git](https://git-scm.com/) and [Ansible](https://www.ansible.com/) first, then in order to clone the project via HTTPS, run this command:**
+**You need to install [Git](https://git-scm.com/) and [Ansible Core 2.11+](https://www.ansible.com/) first, then in order to clone the project via HTTPS, run this command:**
 
 ```
 git clone https://github.com/viniciusbmello/ansible_docker_wordpress.git
