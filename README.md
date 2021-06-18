@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
 
-> This was a lab suggested by [Umbler](https://umbler.com/) to deploy an [Worpress](https://wordpress.org/) server using IoC as [Ansible](https://www.ansible.com/).
+> This was a lab suggested by [Umbler](https://umbler.com/) to deploy an [Worpress](https://wordpress.org/) server using IaC as [Ansible](https://www.ansible.com/).
 
 This is an script where the main objective is to build a Docker service for Wordpress-FPM, Nginx and Mysql.
 
